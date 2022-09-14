@@ -7,31 +7,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet(name = "LogicServlet", value="/start")
+@WebServlet(name = "InitServlet", value = "/start")
 public class InitServlet extends HttpServlet {
-
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        HttpSession httpSession = request.getSession(true);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // create new session
+        HttpSession currentSession = req.getSession(true);
 
         // create game field
-        Field gameField = new Field();
-        Map<Integer, Sign> fieldData = gameField.getField();
+        Field field = new Field();
+        Map<Integer, Sign> fieldData = field.getField();
 
-        // create list of data game Field
-        List<Sign> dataField = gameField.getFieldData();
+        // get data of fields
+        List<Sign> data = field.getFieldData();
 
-        // add game field in Session
-        httpSession.setAttribute("field", gameField);
-        httpSession.setAttribute("data", dataField);
+        // add fields && data in SESSION
+        currentSession.setAttribute("field", field);
+        currentSession.setAttribute("data", data);
 
-        // redirect and forward to index.jsp
-        getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
-
+        // redirect tot INDEX.JSP
+        getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 }
